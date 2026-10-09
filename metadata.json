@@ -1,0 +1,6 @@
+{
+  "name": "PaisaPilot India",
+  "description": "Daily and monthly expense tracker tailored for Indian students and households by Team Zenvex.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

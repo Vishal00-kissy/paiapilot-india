@@ -1,0 +1,69 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null && request.auth.uid != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Validation helpers
+    function isValidUser(data) {
+      return data.keys().hasAll(['uid', 'email'])
+        && data.uid is string
+        && data.email is string;
+    }
+
+    function isValidUserSettings(data) {
+      return data.keys().hasAll(['budget', 'lang'])
+        && data.budget is number
+        && data.budget >= 0
+        && data.lang in ['en', 'te'];
+    }
+
+    function isValidExpense(data, userId) {
+      return data.keys().hasAll(['amount', 'desc', 'category', 'date', 'payment', 'userId'])
+        && data.amount is number
+        && data.amount > 0
+        && data.desc is string
+        && data.desc.size() > 0
+        && data.desc.size() <= 200
+        && data.date is string
+        && data.payment is string
+        && data.category is string
+        && data.userId == userId;
+    }
+
+    // User profile documents
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidUser(request.resource.data);
+      allow update: if isOwner(userId) && isValidUser(request.resource.data);
+      allow delete: if isOwner(userId);
+
+      // Settings subcollection
+      match /settings/{settingId} {
+        allow read: if isOwner(userId);
+        allow create, update: if isOwner(userId) && isValidUserSettings(request.resource.data);
+        allow delete: if isOwner(userId);
+      }
+
+      // Expenses subcollection
+      match /expenses/{expenseId} {
+        allow read: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidExpense(request.resource.data, userId);
+        allow update: if isOwner(userId) && isValidExpense(request.resource.data, userId);
+        allow delete: if isOwner(userId);
+      }
+    }
+
+    // Test collection for boot connectivity check
+    match /test/{docId} {
+      allow read: if true;
+    }
+  }
+}

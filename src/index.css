@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+:root {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Telugu", "Nirmala UI", Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.5;
+  color-scheme: light dark;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background-color: #f8fafc;
+  color: #0f172a;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #0b1120;
+    color: #f1f5f9;
+  }
+}
+
+/* Ensure accessible focus outlines */
+*:focus-visible {
+  outline: 2px solid #059669;
+  outline-offset: 2px;
+}
+
+/* Prevent double-tap zoom delay on mobile buttons */
+button, input, select, textarea {
+  touch-action: manipulation;
+}
+
+/* Numeric tabular values alignment */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}

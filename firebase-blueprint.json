@@ -1,0 +1,62 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile document",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["uid", "email"]
+    },
+    "UserSettings": {
+      "title": "UserSettings",
+      "description": "Settings per user",
+      "type": "object",
+      "properties": {
+        "budget": { "type": "number" },
+        "demoBudget": { "type": "boolean" },
+        "household": { "type": "object" },
+        "lang": { "type": "string" },
+        "categoryLimits": { "type": "object" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["budget", "lang"]
+    },
+    "Expense": {
+      "title": "Expense",
+      "description": "User transaction/expense record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "amount": { "type": "number" },
+        "desc": { "type": "string" },
+        "category": { "type": "string" },
+        "date": { "type": "string" },
+        "payment": { "type": "string" },
+        "demo": { "type": "boolean" },
+        "recurring": { "type": "object" },
+        "createdAt": { "type": "string" },
+        "userId": { "type": "string" }
+      },
+      "required": ["amount", "desc", "category", "date", "payment", "userId"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profile documents"
+    },
+    "/users/{userId}/settings/current": {
+      "schema": "UserSettings",
+      "description": "User finance settings and category limits"
+    },
+    "/users/{userId}/expenses/{expenseId}": {
+      "schema": "Expense",
+      "description": "User expenses and transactions"
+    }
+  }
+}
